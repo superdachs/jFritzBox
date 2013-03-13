@@ -139,20 +139,20 @@ public class CallMonitor implements Runnable {
 
     private void newInCall(Integer callId, Date date, String line) {
         String[] lineArray = line.split(";");
-        //System.out.println("ID " + callId + " RING - " + date + " FROM " + lineArray[3] + " ON " + lineArray[4]);
+        System.out.println("ID " + callId + " RING - " + date + " FROM " + lineArray[3] + " ON " + lineArray[4]);
         Call c = new Call(callId, lineArray[3], lineArray[4], date, Direction.IN);
         activeCalls.put(callId, c);
     }
 
     private void newOutCall(Integer callId, Date date, String line) {
         String[] lineArray = line.split(";");
-        //System.out.println("ID " + callId + " OUT - " + date + " FROM " + lineArray[3] + " ON " + lineArray[4]);
+        System.out.println("ID " + callId + " OUT - " + date + " FROM " + lineArray[3] + " ON " + lineArray[4]);
         Call c = new Call(callId, lineArray[3], lineArray[4], date, Direction.IN);
         activeCalls.put(callId, c);
     }
 
     private void connectCall(Integer callId, Date date, String line) {
-        //System.out.println("ID " + callId + " CONNECT");
+        System.out.println("ID " + callId + " CONNECT");
         activeCalls.get(callId).answer(date);
 
     }

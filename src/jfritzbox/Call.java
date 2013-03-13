@@ -14,15 +14,15 @@ public class Call {
     
     public enum Direction {IN, OUT};
     
-    private Integer id;
-    private boolean isActive;
-    private boolean answered;
-    private String remoteNumber;
-    private String localNumber;
-    private Date start;
-    private Date connect;
-    private Date end;
-    private Direction direction;
+    private Integer id;             //  Database fields:
+    private boolean isActive;       //
+    private boolean answered;       //
+    private String remoteNumber;    //  remoteNumber    char[]
+    private String localNumber;     //  localNumber     char[]
+    private Date start;             //  start           date
+    private Date connect;           //  connect         date
+    private Date end;               //  end             date
+    private Direction direction;    //  direction       char (i/o)
     
     Call(Integer id, String remoteNumber, String localNumber, Date start, Direction direction) {
         this.remoteNumber = remoteNumber;
