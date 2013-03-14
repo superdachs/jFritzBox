@@ -11,6 +11,34 @@ import java.util.Date;
  * @author stk
  */
 public class Call {
+
+    String getRemoteNumber() {
+        return remoteNumber;
+    }
+
+    String getLocalNumber() {
+        return localNumber;
+    }
+
+    Date getStartDate() {
+        return start;
+    }
+
+    Date getConnectDate() {
+        return connect;
+    }
+
+    Date getEndDate() {
+        return end;
+    }
+
+    Direction getDirection() {
+        return this.direction;
+    }
+
+    void setConnectDate(Date endDate) {
+        this.connect = endDate;
+    }
     
     public enum Direction {IN, OUT};
     
@@ -30,6 +58,7 @@ public class Call {
         this.start = start;
         this.isActive = true;
         this.id = id;
+        this.direction = direction;
     }
     
     public boolean isActive() {

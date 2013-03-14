@@ -9,6 +9,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,16 +33,20 @@ public class CallMonitor implements Runnable {
     private BufferedReader in;
     private String fbAddress = "192.168.1.1";
     private int fbPort = 1012;
-    
     private HashMap<Integer, Call> activeCalls;
     private LinkedList<Object> oldCalls;
+    private String url = "jdbc:postgresql://192.168.1.43/jFritzBox";
+    private String user = "stk";
+    private String password = "L1682sk09!WU5";
+    private Connection c = null;
+    private Statement s = null;
     
     CallMonitor() {
 
-        
+
         this.activeCalls = new HashMap<>();
         this.oldCalls = new LinkedList<>();
-        
+
         connect();
 
     }
@@ -124,6 +133,7 @@ public class CallMonitor implements Runnable {
                 newInCall(callId, date, line);
                 break;
             case "CALL":
+                System.out.println(line);
                 newOutCall(callId, date, line);
                 break;
             case "CONNECT":
@@ -133,6 +143,7 @@ public class CallMonitor implements Runnable {
                 disconnectCall(callId, date, line);
                 break;
             default:
+                System.out.println(line);
                 break;
         }
     }
@@ -147,7 +158,7 @@ public class CallMonitor implements Runnable {
     private void newOutCall(Integer callId, Date date, String line) {
         String[] lineArray = line.split(";");
         System.out.println("ID " + callId + " OUT - " + date + " FROM " + lineArray[3] + " ON " + lineArray[4]);
-        Call c = new Call(callId, lineArray[3], lineArray[4], date, Direction.IN);
+        Call c = new Call(callId, lineArray[5], lineArray[4], date, Direction.OUT);
         activeCalls.put(callId, c);
     }
 
@@ -158,9 +169,37 @@ public class CallMonitor implements Runnable {
     }
 
     private void disconnectCall(Integer callId, Date date, String line) {
+
+        Call call = activeCalls.get(callId);
+        
         System.out.println("ID " + callId + " DISCONNECT - " + date);
-        activeCalls.get(callId).end(date);
+        call.end(date);
         oldCalls.add(activeCalls.get(callId));
         activeCalls.remove(callId);
+
+        String direction;
+
+        if(call.getConnectDate() == null) {
+            call.setConnectDate(call.getEndDate());
+        }
+        
+        if (call.getDirection().equals(Direction.IN)) {
+            direction = "i";
+        } else if (call.getDirection().equals(Direction.OUT)) {
+            direction = "o";
+        } else {
+            direction = "u";
+        }
+
+        try {
+            c = DriverManager.getConnection(url, user, password);
+            s = c.createStatement();
+            s.executeUpdate("INSERT INTO calls (\"start\", \"end\", \"localNumber\", \"remoteNumber\", \"direction\", \"connect\")" 
+                    + " VALUES ('" + call.getStartDate() + "', '" + call.getEndDate()
+                    + "', '" + call.getLocalNumber() + "', '" + call.getRemoteNumber() + "', '"
+                    + direction + "', '" + call.getConnectDate() + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(CallMonitor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
