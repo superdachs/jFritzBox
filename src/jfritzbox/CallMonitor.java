@@ -102,6 +102,7 @@ public class CallMonitor implements Runnable {
 
         Integer day = Integer.parseInt(dayStr);
         Integer month = Integer.parseInt(monthStr);
+        month = month - 1;
         Integer year = Integer.parseInt(yearStr);
         year = year + 100;
 
