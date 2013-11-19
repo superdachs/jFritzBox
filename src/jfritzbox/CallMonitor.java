@@ -11,15 +11,14 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import jfritzbox.Call.Direction;
 
 /**
@@ -102,6 +101,7 @@ public class CallMonitor implements Runnable {
 
         Integer day = Integer.parseInt(dayStr);
         Integer month = Integer.parseInt(monthStr);
+        month = month - 1;
         Integer year = Integer.parseInt(yearStr);
         year = year + 100;
 
