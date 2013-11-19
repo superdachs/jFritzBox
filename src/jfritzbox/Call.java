@@ -12,6 +12,11 @@ import java.util.Date;
  */
 public class Call {
 
+    /**
+     * get the remote number
+     *
+     * @return the remote number as String
+     */
     String getRemoteNumber() {
         return remoteNumber;
     }
@@ -39,9 +44,12 @@ public class Call {
     void setConnectDate(Date endDate) {
         this.connect = endDate;
     }
-    
-    public enum Direction {IN, OUT};
-    
+
+    public enum Direction {
+
+        IN, OUT
+    };
+
     private Integer id;             //  Database fields:
     private boolean isActive;       //
     private boolean answered;       //
@@ -51,7 +59,7 @@ public class Call {
     private Date connect;           //  connect         date
     private Date end;               //  end             date
     private Direction direction;    //  direction       char (i/o)
-    
+
     Call(Integer id, String remoteNumber, String localNumber, Date start, Direction direction) {
         this.remoteNumber = remoteNumber;
         this.localNumber = localNumber;
@@ -60,20 +68,19 @@ public class Call {
         this.id = id;
         this.direction = direction;
     }
-    
+
     public boolean isActive() {
         return isActive;
     }
-    
+
     public void answer(Date connect) {
         this.connect = connect;
         this.answered = true;
     }
-    
+
     public void end(Date end) {
         this.end = end;
         this.isActive = false;
     }
-    
-    
+
 }
